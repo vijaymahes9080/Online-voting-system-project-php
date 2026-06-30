@@ -1,0 +1,29 @@
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+.project
+.settings/
+.buildpath
+
+# PHP log files and caches
+error_log
+*.log
+.phpunit.result.cache
+
+# Composer dependencies
+vendor/
