@@ -69,3 +69,5 @@ Here is a preview of the Online Voting System design:
 
 ### Real-time Results Dashboard
 ![Results Chart Mockup](images/voting_results.png)
+
+<!-- contribution checkpoint 1 -->
