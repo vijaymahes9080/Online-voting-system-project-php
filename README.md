@@ -71,3 +71,5 @@ Here is a preview of the Online Voting System design:
 ![Results Chart Mockup](images/voting_results.png)
 
 <!-- contribution checkpoint 1 -->
+
+<!-- contribution checkpoint 2 -->
