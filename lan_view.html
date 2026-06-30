@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Results - Online Voting System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Voting Results So Far</h2>
+            <p>Below are the current vote counts for each programming language.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">ID</th>
+                        <th style="width: 25%;">Language</th>
+                        <th style="width: 50%;">About</th>
+                        <th style="width: 15%; text-align: center;">Votes</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table-body">
+                    <!-- Loaded dynamically via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        requireAuth();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const languages = JSON.parse(localStorage.getItem("languages")) || [];
+            const tableBody = document.getElementById("results-table-body");
+
+            if (languages.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--error);">No results found</td></tr>`;
+                return;
+            }
+
+            languages.forEach(lang => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${lang.lan_id}</td>
+                    <td style="font-weight: 600; color: var(--accent-color);">${lang.fullname}</td>
+                    <td style="color: var(--text-secondary);">${lang.about}</td>
+                    <td style="text-align: center; font-weight: 700; color: var(--success);">${lang.votecount}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        });
+    </script>
+</body>
+</html>

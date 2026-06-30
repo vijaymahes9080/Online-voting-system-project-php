@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Online Voting System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js"></script>
+    <script>
+        requireNoAuth();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="card" style="max-width: 480px; margin: 40px auto;">
+            <h2>Create Voter Account</h2>
+            <p>Fill out the form below to register yourself in the system.</p>
+
+            <div id="error-alert" class="alert alert-error"></div>
+            <div id="success-alert" class="alert alert-success"></div>
+
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input type="text" id="firstname" required minlength="2" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" id="lastname" required minlength="1" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required minlength="3" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password (min 6 chars)</label>
+                    <input type="password" id="password" required minlength="6" placeholder="Password">
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin: 25px 0 15px 0;">
+                    <input type="checkbox" id="captcha-mock" required style="width: 18px; height: 18px; accent-color: var(--primary-color);">
+                    <label for="captcha-mock" style="margin-bottom: 0; cursor: pointer;">I verify that I am a human voter</label>
+                </div>
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <p style="margin-top: 25px; font-size: 14px; margin-bottom: 0;">
+                Already have an account? <a href="login.html" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("register-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const firstname = document.getElementById("firstname").value.trim();
+            const lastname = document.getElementById("lastname").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const errorAlert = document.getElementById("error-alert");
+            const successAlert = document.getElementById("success-alert");
+
+            errorAlert.style.display = "none";
+            successAlert.style.display = "none";
+
+            // Check if username is already taken
+            if (localStorage.getItem("voter_" + username)) {
+                errorAlert.textContent = "Username already exists! Choose another.";
+                errorAlert.style.display = "block";
+                return;
+            }
+
+            // Create user object
+            const newUser = {
+                firstname: firstname,
+                lastname: lastname,
+                username: username,
+                password: password,
+                status: "NOTVOTED",
+                voted: null
+            };
+
+            // Save in localStorage
+            localStorage.setItem("voter_" + username, JSON.stringify(newUser));
+
+            successAlert.textContent = "Registration successful! Redirecting to login...";
+            successAlert.style.display = "block";
+
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1800);
+        });
+    </script>
+</body>
+</html>

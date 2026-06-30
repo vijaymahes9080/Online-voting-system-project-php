@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Vote - Online Voting System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h4 style="text-align: left; color: var(--text-secondary); font-weight: 500; font-size: 15px; margin-bottom: 5px;">
+                Welcome, <span id="user-display" style="color: var(--primary-color); font-weight: 600;"></span>
+            </h4>
+            <h2 style="text-align: left; margin-bottom: 25px;">Cast Your Vote</h2>
+            
+            <div id="error-alert" class="alert alert-error"></div>
+            <div id="success-alert" class="alert alert-success"></div>
+
+            <form id="vote-form">
+                <p style="text-align: left; margin-bottom: 15px;">What is your favorite programming language?</p>
+                <div class="radio-group" id="options-container">
+                    <!-- Loaded dynamically via JavaScript to keep database synchronized -->
+                </div>
+                <button type="submit" class="btn" id="vote-btn" style="margin-top: 15px;">Submit Vote</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const username = requireAuth();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("user-display").textContent = username;
+
+            const user = JSON.parse(localStorage.getItem("voter_" + username));
+            const errorAlert = document.getElementById("error-alert");
+            const successAlert = document.getElementById("success-alert");
+            const voteBtn = document.getElementById("vote-btn");
+
+            // Retrieve languages list from localStorage
+            const languages = JSON.parse(localStorage.getItem("languages"));
+            const container = document.getElementById("options-container");
+
+            // Render options
+            languages.forEach(lang => {
+                const label = document.createElement("label");
+                label.className = "radio-card";
+                label.innerHTML = `
+                    <input type="radio" name="lan" value="${lang.fullname}" ${user.status === 'VOTED' ? 'disabled' : ''}>
+                    <span>${lang.fullname}</span>
+                `;
+                container.appendChild(label);
+            });
+
+            // If already voted, disable and alert user
+            if (user.status === "VOTED") {
+                errorAlert.textContent = "You have already voted! You cannot vote again.";
+                errorAlert.style.display = "block";
+                voteBtn.disabled = true;
+                voteBtn.classList.add("btn-secondary");
+                voteBtn.style.cursor = "not-allowed";
+            }
+
+            document.getElementById("vote-form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                
+                errorAlert.style.display = "none";
+                successAlert.style.display = "none";
+
+                // Re-verify voter record
+                const liveUser = JSON.parse(localStorage.getItem("voter_" + username));
+                if (liveUser.status === "VOTED") {
+                    errorAlert.textContent = "You have already voted! You cannot vote again.";
+                    errorAlert.style.display = "block";
+                    return;
+                }
+
+                // Get selected language
+                const selectedRadio = document.querySelector('input[name="lan"]:checked');
+                if (!selectedRadio) {
+                    errorAlert.textContent = "Please select a language to vote!";
+                    errorAlert.style.display = "block";
+                    return;
+                }
+
+                const selectedLan = selectedRadio.value;
+
+                // Update voter status
+                liveUser.status = "VOTED";
+                liveUser.voted = selectedLan;
+                localStorage.setItem("voter_" + username, JSON.stringify(liveUser));
+
+                // Update language count
+                const currentLangs = JSON.parse(localStorage.getItem("languages"));
+                const targetLang = currentLangs.find(l => l.fullname === selectedLan);
+                if (targetLang) {
+                    targetLang.votecount += 1;
+                }
+                localStorage.setItem("languages", JSON.stringify(currentLangs));
+
+                successAlert.textContent = "Congratulations! Your vote for " + selectedLan + " has been cast successfully.";
+                successAlert.style.display = "block";
+
+                // Disable voting inputs
+                document.querySelectorAll('input[name="lan"]').forEach(input => input.disabled = true);
+                voteBtn.disabled = true;
+                voteBtn.classList.add("btn-secondary");
+                voteBtn.style.cursor = "not-allowed";
+
+                setTimeout(() => {
+                    window.location.href = "lan_view.html";
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

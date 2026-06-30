@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Online Voting System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js"></script>
+    <script>
+        requireNoAuth();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="card" style="max-width: 450px; margin: 40px auto;">
+            <h2>Login for Voting</h2>
+            <p>Enter your details below to access the voting panel.</p>
+            
+            <div id="error-alert" class="alert alert-error"></div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <p style="margin-top: 25px; font-size: 14px; margin-bottom: 0;">
+                Don't have an account? <a href="register.html" style="color: var(--primary-color); text-decoration: none; font-weight: 500;">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const errorAlert = document.getElementById("error-alert");
+
+            errorAlert.style.display = "none";
+
+            // Verify user in localStorage
+            const userStr = localStorage.getItem("voter_" + username);
+            if (!userStr) {
+                errorAlert.textContent = "Invalid username or password!";
+                errorAlert.style.display = "block";
+                return;
+            }
+
+            const user = JSON.parse(userStr);
+            if (user.password !== password) {
+                errorAlert.textContent = "Invalid username or password!";
+                errorAlert.style.display = "block";
+                return;
+            }
+
+            // Set session
+            localStorage.setItem("currentUser", username);
+            window.location.href = "voter.html";
+        });
+    </script>
+</body>
+</html>

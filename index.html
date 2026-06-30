@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Voting System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js"></script>
+    <script>
+        // If already logged in, redirect to voter page
+        requireNoAuth();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Online Voting System</h1>
+            <p>This system allows all registered users to vote for their favorite <strong>PROGRAMMING LANGUAGE</strong>.</p>
+            <p>In order to cast your vote, you need to register a new account first, then log in to the dashboard.</p>
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+                <a href="register.html" class="btn" style="flex: 1;">Get Started</a>
+                <a href="login.html" class="btn btn-secondary" style="flex: 1;">Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
