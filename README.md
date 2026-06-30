@@ -83,3 +83,5 @@ Here is a preview of the Online Voting System design:
 <!-- contribution checkpoint 6 -->
 
 <!-- contribution checkpoint 7 -->
+
+<!-- contribution checkpoint 8 -->
