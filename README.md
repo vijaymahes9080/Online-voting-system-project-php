@@ -77,3 +77,5 @@ Here is a preview of the Online Voting System design:
 <!-- contribution checkpoint 3 -->
 
 <!-- contribution checkpoint 4 -->
+
+<!-- contribution checkpoint 5 -->
